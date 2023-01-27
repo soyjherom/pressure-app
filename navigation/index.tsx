@@ -7,7 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
+import { useCallback } from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
 
 import Colors from '../constants/Colors';
@@ -56,6 +56,33 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
+  const handleTabBarIcon = useCallback(({ color }: any) => <TabBarIcon name="code" color={color} />,[])
+
+  const handlePress = useCallback(({ navigation }: any) => navigation.navigate('Modal'),[])
+
+  const handleStyle = useCallback(({ pressed }: any) => ({
+    opacity: pressed ? 0.5 : 1,
+  }),[])
+
+  const handleHeader = useCallback(() => (
+    <Pressable
+      onPress={handlePress}
+      style={handleStyle}>
+      <FontAwesome
+        name="info-circle"
+        size={25}
+        color={Colors[colorScheme].text}
+        style={{ marginRight: 15 }}
+      />
+    </Pressable>
+  ),[])
+
+  const handleOptions = useCallback(({ navigation }: RootTabScreenProps<'TabOne'>) => ({
+    title: 'Tab One',
+    tabBarIcon: handleTabBarIcon,
+    headerRight: handleHeader,
+  }),[])
+
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
@@ -65,31 +92,14 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="TabOne"
         component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
-        })}
+        options={handleOptions}
       />
       <BottomTab.Screen
         name="TabTwo"
         component={TabTwoScreen}
         options={{
           title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: handleTabBarIcon,
         }}
       />
     </BottomTab.Navigator>
