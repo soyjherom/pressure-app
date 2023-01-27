@@ -77,28 +77,28 @@ function BottomTabNavigator() {
     </Pressable>
   ),[])
 
-  const handleOptions = useCallback(({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-    title: 'Tab One',
+  const handleOptions = useCallback(({ navigation }: RootTabScreenProps<'Dashboard'>) => ({
+    title: 'Dashboard',
     tabBarIcon: handleTabBarIcon,
     headerRight: handleHeader,
   }),[])
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Dashboard"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>
       <BottomTab.Screen
-        name="TabOne"
+        name="Dashboard"
         component={TabOneScreen}
         options={handleOptions}
       />
       <BottomTab.Screen
-        name="TabTwo"
+        name="Registry"
         component={TabTwoScreen}
         options={{
-          title: 'Tab Two',
+          title: 'Register',
           tabBarIcon: handleTabBarIcon,
         }}
       />
