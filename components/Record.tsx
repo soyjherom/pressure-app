@@ -2,7 +2,7 @@ import { useCallback, useState, useEffect } from 'react'
 import { StyleSheet, View, Text, Button } from 'react-native'
 import NumericInput from 'react-native-numeric-input'
 
-export const Registry = () => {
+export const Record = () => {
   const [today, setToday] = useState<string>('00/00/0000')
   const [time, setTime] = useState<string>('00:00')
   const [sys, setSys] = useState<number>(120)
@@ -13,11 +13,19 @@ export const Registry = () => {
     const day: string = String(now.getDate()).padStart(2, '0')
     const month: string = String(now.getMonth() + 1).padStart(2, '0')
     const year: string = String(now.getFullYear())
-    const hour: string = String(now.getHours())
-    const minutes: string = String(now.getMinutes()).padStart(2, '0')
     setToday(`${month}/${day}/${year}`)
-    setTime(`${hour}:${minutes}`)
-  },[setToday, setTime])
+  },[setToday])
+
+  useEffect(()=>{
+    let secTimer = setInterval(()=>{
+      const now = new Date();
+      const hour: string = String(now.getHours())
+      const minutes: string = String(now.getMinutes()).padStart(2, '0')
+      const seconds: string = String(now.getSeconds()).padStart(2, '0')
+      setTime(`at ${hour}:${minutes}:${seconds}`)
+    },1000)
+    return ()=>clearInterval(secTimer)
+  },[])
 
   const handlePress = useCallback(() => console.log(`Sys: ${sys} Dia: ${dia}`),[sys, dia])
 
@@ -28,7 +36,8 @@ export const Registry = () => {
   return(
     <>
       <View style={styles.columnarCenteredContainer}>
-        <Text style={styles.header}>Time: {today} at {time} </Text>
+        <Text style={styles.header}>Date: {today}</Text>
+        <Text style={styles.header}>Time: {time} </Text>
         <View style={styles.columnarCenteredContainer}>
           <Text>SYS</Text>
           <NumericInput value={sys} onChange={handleSys}/>

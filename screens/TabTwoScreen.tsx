@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 
-import { Registry } from '../components/Registry'
+import { Record } from '../components/Record'
 
 export default function TabTwoScreen() {
   return (
-    <Registry/>
+    <Record/>
   );
 }
 
