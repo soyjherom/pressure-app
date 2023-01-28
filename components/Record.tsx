@@ -1,6 +1,9 @@
 import { useCallback, useState, useEffect } from 'react'
-import { StyleSheet, View, Text, Button } from 'react-native'
+import { View, Text, Button } from 'react-native'
 import NumericInput from 'react-native-numeric-input'
+import { styles } from '../assets/styles/GeneralStyles'
+
+// TODO: CREATE A HOOK TO STORAGE THE PRESSURES ON A CSV FILE TO FEED THE DASHBOARD
 
 export const Record = () => {
   const [today, setToday] = useState<string>('00/00/0000')
@@ -39,27 +42,21 @@ export const Record = () => {
         <Text style={styles.header}>Date: {today}</Text>
         <Text style={styles.header}>Time: {time} </Text>
         <View style={styles.columnarCenteredContainer}>
-          <Text>SYS</Text>
-          <NumericInput value={sys} onChange={handleSys}/>
-          <Text>DIA</Text>
-          <NumericInput value={dia} onChange={handleDia}/>
+          <Text style={styles.header}>SYS</Text>
+          <NumericInput 
+            value={sys} 
+            onChange={handleSys}
+            totalWidth={240}
+          />
+          <Text style={styles.header}>DIA</Text>
+          <NumericInput 
+            value={dia} 
+            onChange={handleDia}
+            totalWidth={240}
+          />
         </View>
         <Button title="Register" onPress={handlePress}></Button>
       </View>
     </>
   )
 }
-
-const styles = StyleSheet.create({
-  columnarCenteredContainer: {
-    marginTop: 20,
-    margin: 20,
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  header: {
-    fontSize: 28
-  }
-})
