@@ -14,8 +14,8 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import RecordScreen from '../screens/RecordScreen';
+import DashboardScreen from '../screens/DashboardScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -77,28 +77,28 @@ function BottomTabNavigator() {
     </Pressable>
   ),[])
 
-  const handleOptions = useCallback(({ navigation }: RootTabScreenProps<'Dashboard'>) => ({
-    title: 'Dashboard',
+  const handleOptions = useCallback(({ navigation }: RootTabScreenProps<'RecordScreen'>) => ({
+    title: 'Pressure Registry',
     tabBarIcon: handleTabBarIcon,
     headerRight: handleHeader,
   }),[])
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Dashboard"
+      initialRouteName="RecordScreen"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>
       <BottomTab.Screen
-        name="Dashboard"
-        component={TabOneScreen}
+        name="RecordScreen"
+        component={RecordScreen}
         options={handleOptions}
       />
       <BottomTab.Screen
-        name="Registry"
-        component={TabTwoScreen}
+        name="DashboardScreen"
+        component={DashboardScreen}
         options={{
-          title: 'Register',
+          title: 'Dashboard',
           tabBarIcon: handleTabBarIcon,
         }}
       />

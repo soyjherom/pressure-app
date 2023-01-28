@@ -1,10 +1,14 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+import { RootTabScreenProps } from '../types';
 
 import { Record } from '../components/Record'
 
-export default function TabTwoScreen() {
+export default function RecordScreen({ navigation }: RootTabScreenProps<'RecordScreen'>) {
   return (
-    <Record/>
+    <View style={styles.container}>
+      <Record/>
+    </View>
   );
 }
 
