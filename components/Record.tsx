@@ -2,6 +2,8 @@ import { useCallback, useState, useEffect } from 'react'
 import { View, Text, Button } from 'react-native'
 import NumericInput from 'react-native-numeric-input'
 import { styles } from '../assets/styles/GeneralStyles'
+import { Pressure } from '../types/Pressure'
+import { useRegister } from '../hooks/useRegister'
 
 // TODO: CREATE A HOOK TO STORAGE THE PRESSURES ON A CSV FILE TO FEED THE DASHBOARD
 
@@ -10,6 +12,12 @@ export const Record = () => {
   const [time, setTime] = useState<string>('00:00')
   const [sys, setSys] = useState<number>(120)
   const [dia, setDia] = useState<number>(80)
+  const [pressure, setPressure] = useState<Pressure>({
+    date: today,
+    time: time,
+    syst: sys,
+    dias: dia
+  })
 
   useEffect(()=>{
     const now = new Date();
@@ -30,7 +38,16 @@ export const Record = () => {
     return ()=>clearInterval(secTimer)
   },[])
 
-  const handlePress = useCallback(() => console.log(`Sys: ${sys} Dia: ${dia}`),[sys, dia])
+  const handlePress = useCallback(() => {
+    console.log(`Sys: ${sys} Dia: ${dia}`),[sys, dia]
+    setPressure({
+      date: today,
+      time: time,
+      syst: sys,
+      dias: dia
+    })
+    pressure && useRegister(pressure)
+  },[today, time, sys, dia])
 
   const handleSys = useCallback((value: number) => setSys(value),[setSys])
 
