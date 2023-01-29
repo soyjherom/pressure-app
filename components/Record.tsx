@@ -3,11 +3,10 @@ import { View, Text, Button } from 'react-native'
 import NumericInput from 'react-native-numeric-input'
 import { styles } from '../assets/styles/GeneralStyles'
 import { Pressure } from '../types/Pressure'
-import { useRegister } from '../hooks/useRegister'
-
-// TODO: CREATE A HOOK TO STORAGE THE PRESSURES ON A CSV FILE TO FEED THE DASHBOARD
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const Record = () => {
+
   const [today, setToday] = useState<string>('00/00/0000')
   const [time, setTime] = useState<string>('00:00')
   const [sys, setSys] = useState<number>(120)
@@ -25,7 +24,7 @@ export const Record = () => {
     const month: string = String(now.getMonth() + 1).padStart(2, '0')
     const year: string = String(now.getFullYear())
     setToday(`${month}/${day}/${year}`)
-  },[setToday])
+  },[])
 
   useEffect(()=>{
     let secTimer = setInterval(()=>{
@@ -38,20 +37,40 @@ export const Record = () => {
     return ()=>clearInterval(secTimer)
   },[])
 
+  useEffect(()=>{
+    console.log(pressure)
+
+    const save = async(p:Pressure) => {
+      try{
+        await AsyncStorage.setItem('@pressure_data', JSON.stringify(p))
+      }catch(e){console.error(e)}
+    }
+
+    const read = async() => {
+      try{
+        const value = await AsyncStorage.getItem('@pressure_data')
+        if(value){
+          console.log(`Stored data: ${value}`)
+        }
+      }catch(e){console.error(e)}
+    }
+
+    save(pressure)
+    read()
+  },[pressure])
+
+  const handleSys = useCallback((value: number) => setSys(value),[setSys])
+
+  const handleDia = useCallback((value: number) => setDia(value),[setDia])
+
   const handlePress = useCallback(() => {
-    console.log(`Sys: ${sys} Dia: ${dia}`),[sys, dia]
     setPressure({
       date: today,
       time: time,
       syst: sys,
       dias: dia
     })
-    pressure && useRegister(pressure)
-  },[today, time, sys, dia])
-
-  const handleSys = useCallback((value: number) => setSys(value),[setSys])
-
-  const handleDia = useCallback((value: number) => setDia(value),[setDia])
+  },[today, time, dia, sys, pressure, setPressure])
 
   return(
     <>
